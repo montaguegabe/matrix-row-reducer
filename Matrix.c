@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <math.h>
+#include <stdbool.h>
 
 #define ZERO_THRESH 0.0000001
 
@@ -26,14 +28,14 @@ void mtrxFromFile(const char filename[]);
 bool pickAndSwapPivot();
 void printMatrix();
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
+
 	printf("\nEnter matrix filename, or type 'enter' to enter.\n");
 	char promptString[100];
 	scanf("%s", promptString);
 
-	if (strcmp(promptString, "enter") == 0)
-	{
+	if (strcmp(promptString, "enter") == 0) {
+
 		printf("Enter the number of rows: ");
 		scanf("%d", &rows);
 
@@ -42,12 +44,12 @@ int main(int argc, char const *argv[])
 
 		printf("\nNote: you can enter '|' to place the augmentation bar.\n");
 
-		for (int i = 0; i < rows; ++i)
-		{
-			for (int j = 0; j < columns; ++j)
-			{
+		for (int i = 0; i < rows; ++i) {
+
+			for (int j = 0; j < columns; ++j) {
+
 				double input;
-				printf("\nRow %d Column %d: ", i+1, j+1);
+				printf("Row %d Column %d: ", i+1, j+1);
 				scanf("%lf", &(input));
 
 				matrix[i][j] = input;
@@ -60,7 +62,6 @@ int main(int argc, char const *argv[])
 
 	// Backup
 	cpyMatrix(matrix, prevMatrix);
-
 	printf("\n");
 
 	// Main loop
@@ -74,8 +75,8 @@ int main(int argc, char const *argv[])
 		char command[5];
 		scanf("%s", command);
 
-		if (command[0] == 'a')
-		{
+		if (command[0] == 'a') {
+
 			// Backup
 			cpyMatrix(matrix, prevMatrix);
 
@@ -93,8 +94,8 @@ int main(int argc, char const *argv[])
 
 			mtrxAdd(matrix, row, srcRow, factor);
 		}
-		else if (command[0] == 'm')
-		{
+
+		else if (command[0] == 'm') {
 			// Backup
 			cpyMatrix(matrix, prevMatrix);
 
@@ -108,8 +109,7 @@ int main(int argc, char const *argv[])
 
 			mtrxMult(matrix, row, factor);
 		}
-		else if (command[0] == 's')
-		{
+		else if (command[0] == 's') {
 			// Backup
 			cpyMatrix(matrix, prevMatrix);
 
@@ -123,13 +123,13 @@ int main(int argc, char const *argv[])
 
 			mtrxSwap(matrix, row1, row2);
 		}
-		else if (command[0] == 'u')
-		{
+		else if (command[0] == 'u') {
+
 			printf("\n\nUNDO. You may only undo once at a time.\n");
 			cpyMatrix(prevMatrix, matrix);
 		}
-		else if (command[0] == 'r')
-		{
+		else if (command[0] == 'r') {
+
 			// Backup
 			cpyMatrix(matrix, prevMatrix);
 
@@ -139,23 +139,22 @@ int main(int argc, char const *argv[])
 
 			while (pickAndSwapPivot()) {
 
-				if (matrix[pivotRow - 1][pivotColumn - 1] != 1)
-				{
+				if (matrix[pivotRow - 1][pivotColumn - 1] != 1) {
+
 					// Scale
 					double factor = 1.0 / matrix[pivotRow - 1][pivotColumn - 1];
-
-					//printf("mtrxMult(matrix, %d, %lf)\n", pivotRow, factor);
 					mtrxMult(matrix, pivotRow, factor);
 				}
 
 				// Clear column
-				for (int i = 0; i < rows; ++i)
-				{
+				for (int i = 0; i < rows; ++i) {
+
 					if (i == pivotRow - 1) continue;
 
 					double value = matrix[i][pivotColumn - 1];
-					if (abs(value) >= ZERO_THRESH)
-					{
+
+					if (fabs(value) >= ZERO_THRESH) {
+
 						// Subtract multiples
 						mtrxAdd(matrix, i + 1, pivotRow, -value);
 					}
@@ -179,10 +178,10 @@ int main(int argc, char const *argv[])
 void cpyMatrix(double fromMatrix[24][24], double toMatrix[24][24]) {
 
 	// Make copy of matrix for undo
-	for (int i = 0; i < rows; ++i)
-	{
-		for (int j = 0; j < columns; ++j)
-		{
+	for (int i = 0; i < rows; ++i) {
+
+		for (int j = 0; j < columns; ++j) {
+
 			toMatrix[i][j] = fromMatrix[i][j];
 		}
 	}
@@ -193,8 +192,8 @@ void mtrxSwap(double matrix[24][24], int row1, int row2) {
 	row1--;
 	row2--;
 
-	for (int i = 0; i < columns; ++i)
-	{
+	for (int i = 0; i < columns; ++i) {
+
 		double temp = matrix[row1][i];
 		matrix[row1][i] = matrix[row2][i];
 		matrix[row2][i] = temp;
@@ -205,8 +204,8 @@ void mtrxAdd(double matrix[24][24], int targetRow, int sourceRow, double factor)
 	sourceRow--;
 	targetRow--;
 
-	for (int i = 0; i < columns; ++i)
-	{
+	for (int i = 0; i < columns; ++i) {
+
 		matrix[targetRow][i] += matrix[sourceRow][i] * factor;
 	}
 }
@@ -214,8 +213,7 @@ void mtrxMult(double matrix[24][24], int row, double factor) {
 
 	row--;
 
-	for (int i = 0; i < columns; ++i)
-	{
+	for (int i = 0; i < columns; ++i) {
 		matrix[row][i] *= factor;
 	}
 }
@@ -230,19 +228,19 @@ void mtrxFromFile(const char filename[]) {
 	char line[100];
 	FILE* matrixFile = fopen(filename, "r");
 
-	if (matrixFile)
-	{
+	if (matrixFile) {
+
 		while (fgets (line, sizeof(line), matrixFile)) {
 
 			char* token = strtok(line, " ");
 			while (token) {
 
-				if (token != NULL)
-				{
+				if (token != NULL) {
+
 					if (token[0] == '|') {
 						augBarLocation = column;
-					}
-					else {
+
+					} else {
 						double value;
 						if (sscanf(token, "%lf", &value) != 0) {
 							matrix[row][column] = value;
@@ -258,32 +256,31 @@ void mtrxFromFile(const char filename[]) {
 			column = 0;
 			if (row >= rows) rows = row;
 		}
-		if (ferror(matrixFile))
-		{
+		if (ferror(matrixFile)) {
+
 			fprintf(stderr,"Could not read file.\n");
 			abort();
 		}
 		fclose(matrixFile);
-	}
-	else {
+
+	} else {
 		printf("\nInvalid file.\n\n");
 		exit(-1);
 	}
 }
 
 // Returns whether a pivot was able to be picked
-// Does
 bool pickAndSwapPivot() {
 
 	int potentialPivotRow = pivotRow + 1;
 	int potentialPivotColumn = pivotColumn + 1;
 
 	// If matrix is 0 then don't use that point as a pivot
-	while (abs(matrix[potentialPivotRow - 1][potentialPivotColumn - 1]) < ZERO_THRESH ) {
+	while (fabs(matrix[potentialPivotRow - 1][potentialPivotColumn - 1]) < ZERO_THRESH ) {
 		potentialPivotRow++;
 
-		if (potentialPivotRow > rows)
-		{
+		if (potentialPivotRow > rows) {
+
 			potentialPivotRow = pivotRow + 1;
 			potentialPivotColumn++;
 
@@ -295,17 +292,15 @@ bool pickAndSwapPivot() {
 	pivotRow++;
 	pivotColumn = potentialPivotColumn;
 
-	//printf("Pivot picked at row %d column %d: %lf\n", pivotRow, pivotColumn, matrix[pivotRow - 1][pivotColumn - 1]);
-
 	return true;
 }
 
 void printMatrix() {
 	printf("\nMatrix:\n");
-	for (int i = 0; i < rows; ++i)
-	{
-		for (int j = 0; j < columns; ++j)
-		{
+	for (int i = 0; i < rows; ++i) {
+
+		for (int j = 0; j < columns; ++j) {
+
 			if (j == augBarLocation) printf("| ");
 
 			double value = matrix[i][j];
@@ -315,6 +310,4 @@ void printMatrix() {
 		printf("\n");
 	}
 }
-
-
 
