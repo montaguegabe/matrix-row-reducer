@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <stdbool.h>
+#include <math.h>
 
 #define ZERO_THRESH 0.0000001
 
@@ -154,7 +156,7 @@ int main(int argc, char const *argv[])
 					if (i == pivotRow - 1) continue;
 
 					double value = matrix[i][pivotColumn - 1];
-					if (abs(value) >= ZERO_THRESH)
+					if (fabs(value) >= ZERO_THRESH)
 					{
 						// Subtract multiples
 						mtrxAdd(matrix, i + 1, pivotRow, -value);
@@ -279,7 +281,7 @@ bool pickAndSwapPivot() {
 	int potentialPivotColumn = pivotColumn + 1;
 
 	// If matrix is 0 then don't use that point as a pivot
-	while (abs(matrix[potentialPivotRow - 1][potentialPivotColumn - 1]) < ZERO_THRESH ) {
+	while (fabs(matrix[potentialPivotRow - 1][potentialPivotColumn - 1]) < ZERO_THRESH ) {
 		potentialPivotRow++;
 
 		if (potentialPivotRow > rows)
