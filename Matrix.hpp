@@ -16,7 +16,7 @@ using std::vector;
 using std::size_t;
 using std::string;
 
-// A simple two dimensional vector of doubles
+// Implemented using a simple two dimensional vector of doubles
 class Matrix {
 public:
     Matrix() {

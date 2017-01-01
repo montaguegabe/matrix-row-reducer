@@ -221,11 +221,7 @@ void solveMatrix(Matrix & matrix) {
         }
         
         // Search for another non-zero pivot to use
-        while (true) {
-            
-            // Check (absolute) value of potential pivot
-            double potentialPivotValue = fabs(matrix[potentialPivotRow][potentialPivotColumn]);
-            if (potentialPivotValue >= zeroThresh) break;
+        while (fabs(matrix[potentialPivotRow][potentialPivotColumn]) < zeroThresh) {
             
             // Search down the column first
             potentialPivotRow++;
