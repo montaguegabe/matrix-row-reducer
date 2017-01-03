@@ -1,0 +1,16 @@
+{
+    "executableName": "matrixtool",
+    "buildDir": "build/",
+    "sourceFiles": [
+        "src/*.cpp"
+    ],
+    "emccOptions": [
+        "-O3"
+    ],
+    "cOptions": [
+        "-std=c++11"
+    ],
+    "preloadFiles": [
+        "examples/"
+    ]
+}

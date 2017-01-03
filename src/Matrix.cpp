@@ -16,6 +16,7 @@
 
 #include "StringSplit.hpp"
 #include "Matrix.hpp"
+#include "AdaptedConsole.hpp"
 
 using std::strtok;
 using std::getline;
@@ -23,11 +24,6 @@ using std::ifstream;
 using std::stod;
 using std::invalid_argument;
 using std::vector;
-using std::cout;
-using std::endl;
-using std::setprecision;
-using std::fixed;
-using std::setw;
 
 #pragma mark - Container methods
 
@@ -84,6 +80,12 @@ bool Matrix::loadFromFile(string filename) {
 }
 
 void Matrix::print() const {
+    
+    using std::cout;
+    using std::endl;
+    using std::setprecision;
+    using std::fixed;
+    using std::setw;
     
     cout << endl << "Matrix:" << endl;
     size_t column;

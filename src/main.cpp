@@ -12,10 +12,8 @@
 #include <vector>
 
 #include "Matrix.hpp"
+#include "AdaptedConsole.hpp"
 
-using std::cout;
-using std::cin;
-using std::endl;
 using std::string;
 using std::vector;
 using std::fabs;
@@ -27,6 +25,18 @@ static void solveMatrix(Matrix & matrix);
 
 int main(int argc, char const *argv[]) {
     
+    using adaptedConsole::cin;
+    using std::cout;
+    using std::endl;
+    
+    if (argc != 1) {
+        cout << "Called with " << argc << " argument/s. Printed for console:" << endl;
+        for (int i = 0; i < argc; i++) {
+            cout << argv[i] << endl;
+        }
+        cout << endl;
+    }
+    
     // Create matrix and undo matrix
     Matrix matrix;
     Matrix backupMatrix;
@@ -34,7 +44,7 @@ int main(int argc, char const *argv[]) {
     bool success = false;
     
     while (!success) {
-    
+
         cout << "Enter matrix filename, or type 'enter' to enter." << endl;
         string promptString;
         cin >> promptString;
@@ -53,7 +63,7 @@ int main(int argc, char const *argv[]) {
             matrix.setSize(rows, columns);
             backupMatrix.setSize(rows, columns);
             
-            cout << endl << "Note: you can enter '|' to place the augmentation bar." << endl;
+            //cout << endl << "Note: you can enter '|' to place the augmentation bar." << endl;
             
             // Have the user input the matrix
             for (int i = 0; i < rows; i++) {
@@ -112,10 +122,10 @@ int main(int argc, char const *argv[]) {
             // Add
             case 'a':
                 
-                printf(" Source row: ");
+                cout << " Source row: ";
                 cin >> sourceRow;
                 
-                printf(" Factor: ");
+                cout << " Factor: ";
                 cin >> factor;
                 
                 cout << " Target row: ";
@@ -137,7 +147,7 @@ int main(int argc, char const *argv[]) {
             
             // Swap
             case 's':
-                printf(" Source row: ");
+                cout << " Source row: ";
                 cin >> sourceRow;
                 
                 cout << " Target row: ";
